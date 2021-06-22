@@ -72,12 +72,12 @@ const initialData = {
     },
   },
   option: {
-    0: 'Sangat tidak sesuai',
+    0: 'Sangat sesuai',
     1: '|',
     2: '|',
     3: '|',
     4: '|',
-    5: 'Sangat sesuai',
+    5: 'Sangat tidak sesuai',
   },
   // Facilitate reordering of the columns
   columnOrder: [
