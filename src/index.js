@@ -9,6 +9,8 @@ import Signal from './assets/images/signal.png';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import { Link } from 'react-router-dom';
+import HomeIcon from '@material-ui/icons/Home';
 import './index.css';
 
 const ContainerDrop = styled.div`
@@ -120,20 +122,30 @@ class App extends React.Component {
     const isButton = columns[layout].taskIds.length;
     const nextButton =
       isButton === 0 ? (
-        <Button
-          variant="contained"
-          style={{
-            backgroundColor: '#005589',
-            width: 132,
-            height: 40,
-            position: 'relative',
-            left: 80,
-            bottom: 80,
-          }}
-          onClick={() => this.setState(initialData)}
-        >
-          <ArrowRightAltIcon style={{ color: '#ffffff' }} />
-        </Button>
+        <div>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: '#005589',
+              width: 132,
+              height: 40,
+              position: 'relative',
+              left: 80,
+              bottom: 80,
+            }}
+            onClick={() => this.setState(initialData)}
+          >
+            <ArrowRightAltIcon style={{ color: '#ffffff' }} />
+          </Button>
+          <a
+            href="https://yudaadiitya.github.io/demo-dnd"
+            className="button-home"
+          >
+            <Button variant="contained" style={{ textDecoration: 'none' }}>
+              <HomeIcon />
+            </Button>
+          </a>
+        </div>
       ) : (
         <div></div>
       );
@@ -143,42 +155,46 @@ class App extends React.Component {
         style={{ justifyContent: 'center', alignItems: 'center' }}
       >
         <h1 className="label-test">RIASEC</h1>
-        <div className="layout">
-          <div className="instruction">
-            <p>Drag pernyataan kedalam kolom kesesuaian</p>
-            <img src={Signal} alt="signal" />
+        <div className="smartphone">
+          <div className="smartphone__content">
+            <div className="layout">
+              <div className="instruction">
+                <p>Drag pernyataan kedalam kolom kesesuaian</p>
+                <img src={Signal} alt="signal" />
+              </div>
+              <DragDropContext onDragEnd={this.onDragEnd}>
+                <Droppable
+                  droppableId="all-columns"
+                  direction="vertical"
+                  type="column"
+                >
+                  {(provided) => (
+                    <div>
+                      <ContainerDrop
+                        {...provided.droppableProps}
+                        innerRef={provided.innerRef}
+                      >
+                        {this.state.columnOrder.map((columnId, index) => {
+                          const column = this.state.columns[columnId];
+                          return (
+                            <InnerList
+                              key={column.id}
+                              column={column}
+                              taskMap={this.state.tasks}
+                              index={index}
+                              option={option}
+                            />
+                          );
+                        })}
+                        {provided.placeholder}
+                      </ContainerDrop>
+                    </div>
+                  )}
+                </Droppable>
+                {nextButton}
+              </DragDropContext>
+            </div>
           </div>
-          <DragDropContext onDragEnd={this.onDragEnd}>
-            <Droppable
-              droppableId="all-columns"
-              direction="vertical"
-              type="column"
-            >
-              {(provided) => (
-                <div>
-                  <ContainerDrop
-                    {...provided.droppableProps}
-                    innerRef={provided.innerRef}
-                  >
-                    {this.state.columnOrder.map((columnId, index) => {
-                      const column = this.state.columns[columnId];
-                      return (
-                        <InnerList
-                          key={column.id}
-                          column={column}
-                          taskMap={this.state.tasks}
-                          index={index}
-                          option={option}
-                        />
-                      );
-                    })}
-                    {provided.placeholder}
-                  </ContainerDrop>
-                </div>
-              )}
-            </Droppable>
-            {nextButton}
-          </DragDropContext>
         </div>
       </Container>
     );
